@@ -6,12 +6,14 @@ import {
   Body,
   Put,
   Delete,
-  ParseIntPipe,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
 import { MongoIdPipe } from 'src/common/mongo-id.pipe';
+import { SanitizeMongooseModelInterceptor } from 'nestjs-mongoose-exclude';
+
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
@@ -32,6 +34,12 @@ export class UsersController {
     return this.usersService.getOrdersByUser(id);
   } */
 
+  @UseInterceptors(
+    new SanitizeMongooseModelInterceptor({
+      excludeMongooseId: false,
+      excludeMongooseV: true,
+    }),
+  )
   @Post()
   create(@Body() payload: CreateUserDto) {
     return this.usersService.create(payload);
