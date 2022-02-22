@@ -18,6 +18,14 @@ export class OrderService {
     return findall;
   }
 
+  ordersByCustomer(customerId: number) {
+    return this.orderModel.find({
+      where: {
+        customer: customerId,
+      },
+    });
+  }
+
   async findOne(id: string) {
     await this.orderModel.findById(id);
 

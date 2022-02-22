@@ -7,7 +7,7 @@ import {
   CreateProductDto,
   UpdateProductDto,
   FilterProductsDto,
-} from '../dtos/products.dto';
+} from './../dtos/products.dto';
 
 @Injectable()
 export class ProductsService {
@@ -46,21 +46,18 @@ export class ProductsService {
     return newProduct.save();
   }
 
-  update(id: string, changes: UpdateProductDto) {
-    const product = this.productModel
+  async update(id: string, changes: UpdateProductDto) {
+    const product = await this.productModel
       .findByIdAndUpdate(id, { $set: changes }, { new: true })
       .exec();
+
     if (!product) {
       throw new NotFoundException(`Product #${id} not found`);
     }
-    return product;
+    return product.save();
   }
 
   remove(id: string) {
-    const index = this.productModel.findByIdAndDelete(id);
-    if (!index) {
-      throw new NotFoundException(`Product #${id} not found`);
-    }
-    return index;
+    return this.productModel.findByIdAndDelete(id);
   }
 }

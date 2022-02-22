@@ -51,8 +51,10 @@ export class UsersService {
     const user = await this.userModel
       .findByIdAndUpdate(id, { $set: changes }, { new: true })
       .exec();
+    const hashPassword = await bcrypt.hash(user.password, 10);
+    user.password = hashPassword;
 
-    return user;
+    return user.save();
   }
 
   async remove(id: string) {

@@ -19,11 +19,23 @@ import { SanitizeMongooseModelInterceptor } from 'nestjs-mongoose-exclude';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
+  @UseInterceptors(
+    new SanitizeMongooseModelInterceptor({
+      excludeMongooseId: false,
+      excludeMongooseV: true,
+    }),
+  )
   @Get()
   findAll() {
     return this.usersService.findAll();
   }
 
+  @UseInterceptors(
+    new SanitizeMongooseModelInterceptor({
+      excludeMongooseId: false,
+      excludeMongooseV: true,
+    }),
+  )
   @Get(':id')
   get(@Param('id', MongoIdPipe) id: string) {
     return this.usersService.findOne(id);
@@ -45,11 +57,23 @@ export class UsersController {
     return this.usersService.create(payload);
   }
 
+  @UseInterceptors(
+    new SanitizeMongooseModelInterceptor({
+      excludeMongooseId: false,
+      excludeMongooseV: true,
+    }),
+  )
   @Put(':id')
   update(@Param('id', MongoIdPipe) id: string, @Body() payload: UpdateUserDto) {
     return this.usersService.update(id, payload);
   }
 
+  @UseInterceptors(
+    new SanitizeMongooseModelInterceptor({
+      excludeMongooseId: false,
+      excludeMongooseV: true,
+    }),
+  )
   @Delete(':id')
   remove(@Param('id', MongoIdPipe) id: string) {
     return this.usersService.remove(id);
