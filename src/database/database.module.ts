@@ -34,7 +34,7 @@ const API_KEY_PROD = 'PROD12345634';
       provide: 'MONGO',
       useFactory: async (configService: ConfigType<typeof config>) => {
         const { connection, user, password, dbName } = configService.mongo;
-        const uri = `${connection}://${user}:${password}@cluster0.h6s7a.mongodb.net/${dbName}?retryWrites=true&w=majority`;
+        const uri = `${connection}://${user}:${password}@cluster0.h6s7a.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
         const client = new MongoClient(uri);
         await client.connect();
