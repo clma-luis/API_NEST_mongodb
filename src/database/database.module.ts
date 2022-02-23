@@ -13,10 +13,10 @@ const API_KEY_PROD = 'PROD12345634';
   imports: [
     MongooseModule.forRootAsync({
       useFactory: (configService: ConfigType<typeof config>) => {
-        const { connection, user, password, port, dbName } =
+        const { connection, user, password, host, dbName } =
           configService.mongo;
         return {
-          uri: `${connection}://${port}`,
+          uri: `${connection}://${host}`,
           user,
           pass: password,
           dbName,
@@ -33,9 +33,13 @@ const API_KEY_PROD = 'PROD12345634';
     {
       provide: 'MONGO',
       useFactory: async (configService: ConfigType<typeof config>) => {
-        const { connection, user, password, port, dbName } =
-          configService.mongo;
-        const uri = `${connection}://${user}:${password}@${port}/?authSource=admin&readPreference=primary`;
+        const { connection, user, password, dbName } = configService.mongo;
+        const uri = `${connection}://${user}:${password}@cluster0.h6s7a.mongodb.net/${dbName}?retryWrites=true&w=majority`;
+        /* ${connection}://${user}:${password}@cluster0.h6s7a.mongodb.net/test
+        mongodb+srv://mernproject:Lw2csFWJkNprdBcP@cluster0.h6s7a.mongodb.net/test
+        mongodb+srv://mernproject:Lw2csFWJkNprdBcP@cluster0.h6s7a.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+        ${connection}://${user}:${password}@cluster0.h6s7a.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+        */
         const client = new MongoClient(uri);
         await client.connect();
         const database = client.db(dbName);
