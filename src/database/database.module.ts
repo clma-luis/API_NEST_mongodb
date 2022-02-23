@@ -35,9 +35,8 @@ const API_KEY_PROD = 'PROD12345634';
       useFactory: async (configService: ConfigType<typeof config>) => {
         const { connection, user, password, host, dbName } =
           configService.mongo;
-        const uri = `${connection}://${user}:${password}@cluster0.h6s7a.mongodb.net/test`;
-        /* mongodb+srv://mernproject:Lw2csFWJkNprdBcP@cluster0.h6s7a.mongodb.net/test
-         mongodb+srv://mernproject:Lw2csFWJkNprdBcP@localhost:27017/?authSource=admin&readPreference=primary*/
+        const uri = `${connection}://${user}:${password}@${host}/?authSource=admin&readPreference=primary`;
+        /* mongodb+srv://mernproject:Lw2csFWJkNprdBcP@cluster0.h6s7a.mongodb.net/test */
         const client = new MongoClient(uri);
         await client.connect();
         const database = client.db(dbName);
